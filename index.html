@@ -1,0 +1,587 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Smart Plant Care Assistant | PBL Grade 11C</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Font Awesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Google Fonts: Inter & Outfit -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Outfit:wght@500;600;700;800&display=swap" rel="stylesheet">
+    
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        brand: {
+                            50: '#f0fdf4',
+                            100: '#dcfce7',
+                            500: '#22c55e',
+                            600: '#16a34a',
+                            700: '#15803d',
+                            800: '#166534',
+                            900: '#14532d',
+                        }
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                        heading: ['Outfit', 'sans-serif'],
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        /* Custom styling enhancements */
+        .glass-card {
+            background: rgba(255, 255, 255, 0.85);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(229, 231, 235, 0.8);
+        }
+        .pulse-slow {
+            animation: pulse 3s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+        }
+        @keyframes pulse {
+            0%, 100% { opacity: 1; transform: scale(1); }
+            50% { opacity: 0.85; transform: scale(1.02); }
+        }
+        /* Custom range slider styling */
+        input[type=range] {
+            accent-color: #16a34a;
+        }
+    </style>
+</head>
+<body class="bg-slate-50 text-slate-800 font-sans antialiased min-h-screen flex flex-col justify-between selection:bg-brand-500 selection:text-white">
+
+    <!-- Header / Navigation Bar -->
+    <header class="sticky top-0 z-50 bg-white/90 backdrop-blur-md border-b border-slate-200/80 shadow-sm">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-3.5 flex flex-col md:flex-row items-center justify-between gap-3">
+            <div class="flex items-center space-x-3">
+                <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-brand-600 to-emerald-400 flex items-center justify-center text-white shadow-md shadow-brand-500/20">
+                    <i class="fa-solid fa-leaf text-xl"></i>
+                </div>
+                <div>
+                    <h1 class="font-heading font-extrabold text-lg sm:text-xl text-slate-900 tracking-tight leading-none">
+                        AI Smart Plant Care <span class="text-brand-600">Assistant</span>
+                    </h1>
+                    <p class="text-xs text-slate-500 font-medium mt-0.5">PBL Term 1 Project • Grade 11C</p>
+                </div>
+            </div>
+
+            <!-- School & Status Badges -->
+            <div class="flex items-center gap-2 flex-wrap justify-center">
+                <span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-semibold bg-emerald-50 text-emerald-700 border border-emerald-200/60">
+                    <i class="fa-solid fa-school text-emerald-500 mr-1.5"></i> Al Kamal American International School - Halwan
+                </span>
+                <span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-semibold bg-slate-100 text-slate-700 border border-slate-200">
+                    <span class="w-2 h-2 rounded-full bg-emerald-500 mr-1.5 animate-ping"></span> Live Sensor Feed
+                </span>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content Layout -->
+    <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 w-full flex-grow space-y-8">
+
+        <!-- Hero & Problem/Solution Banner -->
+        <section class="grid grid-cols-1 lg:grid-cols-12 gap-6 items-stretch">
+            
+            <!-- Left Hero Summary -->
+            <div class="lg:col-span-7 bg-gradient-to-br from-slate-900 via-slate-800 to-emerald-950 text-white rounded-3xl p-6 sm:p-8 flex flex-col justify-between shadow-xl relative overflow-hidden">
+                <div class="absolute -right-10 -bottom-10 w-60 h-60 bg-brand-500/10 rounded-full blur-3xl pointer-events-none"></div>
+                
+                <div>
+                    <div class="inline-flex items-center gap-2 px-3 py-1 rounded-lg bg-white/10 backdrop-blur-md text-emerald-300 text-xs font-semibold uppercase tracking-wider mb-4 border border-white/10">
+                        <i class="fa-solid fa-microchip"></i> Environmental Monitoring & AI Health Classification
+                    </div>
+                    <h2 class="font-heading text-2xl sm:text-4xl font-bold leading-tight mb-3">
+                        Translating Complex Sensor Metrics into Simple, Actionable Guidance.
+                    </h2>
+                    <p class="text-slate-300 text-sm sm:text-base leading-relaxed max-w-xl">
+                        Designed to optimize indoor household plant care using real-time soil moisture, temperature, and sun exposure data to prevent overwatering and environmental stress.
+                    </p>
+                </div>
+
+                <!-- Scenario Quick Presets -->
+                <div class="mt-8 pt-6 border-t border-white/10">
+                    <p class="text-xs uppercase font-bold tracking-wider text-slate-400 mb-3 flex items-center gap-1.5">
+                        <i class="fa-solid fa-[#10b981] fa-bolt"></i> Quick Test Scenarios:
+                    </p>
+                    <div class="flex flex-wrap gap-2">
+                        <button onclick="setPreset('optimal')" class="px-3 py-2 rounded-xl bg-emerald-500/20 hover:bg-emerald-500/30 text-emerald-200 border border-emerald-500/30 text-xs font-medium transition flex items-center gap-2">
+                            <i class="fa-solid fa-circle-check text-emerald-400"></i> Optimal Healthy
+                        </button>
+                        <button onclick="setPreset('dry')" class="px-3 py-2 rounded-xl bg-blue-500/20 hover:bg-blue-500/30 text-blue-200 border border-blue-500/30 text-xs font-medium transition flex items-center gap-2">
+                            <i class="fa-solid fa-droplet-slash text-blue-400"></i> Low Soil Moisture
+                        </button>
+                        <button onclick="setPreset('heat')" class="px-3 py-2 rounded-xl bg-orange-500/20 hover:bg-orange-500/30 text-orange-200 border border-orange-500/30 text-xs font-medium transition flex items-center gap-2">
+                            <i class="fa-solid fa-temperature-arrow-up text-orange-400"></i> High Temp & Heat
+                        </button>
+                        <button onclick="setPreset('lowlight')" class="px-3 py-2 rounded-xl bg-amber-500/20 hover:bg-amber-500/30 text-amber-200 border border-amber-500/30 text-xs font-medium transition flex items-center gap-2">
+                            <i class="fa-solid fa-cloud-moon text-amber-400"></i> Dark / Low Sun
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Right Problem vs Solution Card -->
+            <div class="lg:col-span-5 grid grid-rows-2 gap-4">
+                <div class="bg-white rounded-2xl p-5 border border-slate-200/80 shadow-sm flex items-start gap-4 hover:border-red-200 transition">
+                    <div class="w-10 h-10 rounded-xl bg-red-50 text-red-600 flex items-center justify-center shrink-0 font-bold">
+                        <i class="fa-solid fa-triangle-exclamation text-lg"></i>
+                    </div>
+                    <div>
+                        <h3 class="font-heading font-bold text-slate-900 text-base mb-1">The Problem</h3>
+                        <p class="text-xs text-slate-600 leading-relaxed">
+                            Indoor plants frequently die from misinterpreting water or sunlight needs. Raw numbers (like lux or raw moisture %) are confusing for everyday owners to decode manually.
+                        </p>
+                    </div>
+                </div>
+
+                <div class="bg-white rounded-2xl p-5 border border-slate-200/80 shadow-sm flex items-start gap-4 hover:border-emerald-200 transition">
+                    <div class="w-10 h-10 rounded-xl bg-emerald-50 text-emerald-600 flex items-center justify-center shrink-0 font-bold">
+                        <i class="fa-solid fa-lightbulb text-lg"></i>
+                    </div>
+                    <div>
+                        <h3 class="font-heading font-bold text-slate-900 text-base mb-1">Our AI Solution</h3>
+                        <p class="text-xs text-slate-600 leading-relaxed">
+                            A beginner-friendly AI prototype that evaluates environmental threshold logic and converts raw telemetry into clear visual badges and dynamic plant care recommendations.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Main Interactive Dashboard Grid -->
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-8">
+            
+            <!-- Left Side: Interactive Controls & Live Gauges (7 cols) -->
+            <div class="lg:col-span-7 space-y-6">
+                
+                <div class="bg-white rounded-3xl p-6 sm:p-7 border border-slate-200/80 shadow-sm space-y-6">
+                    <div class="flex items-center justify-between pb-4 border-b border-slate-100">
+                        <div>
+                            <h2 class="font-heading font-bold text-xl text-slate-900">Environmental Sensors</h2>
+                            <p class="text-xs text-slate-500">Adjust the interactive sliders below to simulate live hardware readings</p>
+                        </div>
+                        <span class="px-3 py-1 rounded-full text-xs font-semibold bg-slate-100 text-slate-600">
+                            <i class="fa-solid fa-sliders mr-1"></i> Interactive Simulator
+                        </span>
+                    </div>
+
+                    <!-- Sensor 1: Soil Moisture -->
+                    <div class="space-y-2 bg-slate-50 p-4 rounded-2xl border border-slate-100">
+                        <div class="flex justify-between items-center">
+                            <label class="font-semibold text-sm text-slate-800 flex items-center gap-2">
+                                <i class="fa-solid fa-droplet text-blue-500"></i> Soil Moisture
+                            </label>
+                            <span id="moistureVal" class="text-sm font-extrabold text-blue-600 bg-blue-50 px-2.5 py-0.5 rounded-lg border border-blue-100">45%</span>
+                        </div>
+                        <input type="range" id="moistureInput" min="0" max="100" value="45" class="w-full h-2 bg-slate-200 rounded-lg appearance-none cursor-pointer">
+                        <div class="flex justify-between text-[11px] text-slate-400 font-medium">
+                            <span>0% (Bone Dry)</span>
+                            <span>30% Threshold</span>
+                            <span>100% (Saturated)</span>
+                        </div>
+                    </div>
+
+                    <!-- Sensor 2: Ambient Temperature -->
+                    <div class="space-y-2 bg-slate-50 p-4 rounded-2xl border border-slate-100">
+                        <div class="flex justify-between items-center">
+                            <label class="font-semibold text-sm text-slate-800 flex items-center gap-2">
+                                <i class="fa-solid fa-temperature-half text-amber-500"></i> Ambient Temperature
+                            </label>
+                            <span id="tempVal" class="text-sm font-extrabold text-amber-600 bg-amber-50 px-2.5 py-0.5 rounded-lg border border-amber-100">24 °C</span>
+                        </div>
+                        <input type="range" id="tempInput" min="5" max="45" value="24" class="w-full h-2 bg-slate-200 rounded-lg appearance-none cursor-pointer">
+                        <div class="flex justify-between text-[11px] text-slate-400 font-medium">
+                            <span>5°C (Cold)</span>
+                            <span>28°C Threshold</span>
+                            <span>45°C (Extreme)</span>
+                        </div>
+                    </div>
+
+                    <!-- Sensor 3: Light Exposure -->
+                    <div class="space-y-2 bg-slate-50 p-4 rounded-2xl border border-slate-100">
+                        <div class="flex justify-between items-center">
+                            <label class="font-semibold text-sm text-slate-800 flex items-center gap-2">
+                                <i class="fa-solid fa-sun text-yellow-500"></i> Sunlight Level (Lux Intensity)
+                            </label>
+                            <span id="lightVal" class="text-sm font-extrabold text-yellow-600 bg-yellow-50 px-2.5 py-0.5 rounded-lg border border-yellow-100">4500 Lux</span>
+                        </div>
+                        <input type="range" id="lightInput" min="100" max="10000" step="100" value="4500" class="w-full h-2 bg-slate-200 rounded-lg appearance-none cursor-pointer">
+                        <div class="flex justify-between text-[11px] text-slate-400 font-medium">
+                            <span>100 (Shade/Dark)</span>
+                            <span>5000 (Medium)</span>
+                            <span>10000 (Direct Sun)</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Live Metrics Summary Cards -->
+                <div class="grid grid-cols-3 gap-4">
+                    <div class="bg-white p-4 rounded-2xl border border-slate-200/80 shadow-sm text-center">
+                        <p class="text-xs text-slate-500 font-medium">Moisture Status</p>
+                        <p id="moistureStatusText" class="text-sm font-bold text-slate-800 mt-1">Optimal</p>
+                    </div>
+                    <div class="bg-white p-4 rounded-2xl border border-slate-200/80 shadow-sm text-center">
+                        <p class="text-xs text-slate-500 font-medium">Thermal State</p>
+                        <p id="tempStatusText" class="text-sm font-bold text-slate-800 mt-1">Normal</p>
+                    </div>
+                    <div class="bg-white p-4 rounded-2xl border border-slate-200/80 shadow-sm text-center">
+                        <p class="text-xs text-slate-500 font-medium">Lighting State</p>
+                        <p id="lightStatusText" class="text-sm font-bold text-slate-800 mt-1">Adequate</p>
+                    </div>
+                </div>
+
+            </div>
+
+            <!-- Right Side: AI Classification Engine & Recommendations Panel (5 cols) -->
+            <div class="lg:col-span-5 space-y-6">
+                
+                <!-- Main AI Classification Card -->
+                <div id="aiCard" class="bg-white rounded-3xl p-6 sm:p-7 border border-slate-200/80 shadow-lg transition-all duration-300 relative overflow-hidden">
+                    <div class="flex items-center justify-between mb-4">
+                        <span class="text-xs font-bold uppercase tracking-wider text-slate-400 flex items-center gap-1.5">
+                            <i class="fa-solid fa-brain text-purple-500"></i> AI Diagnosis Result
+                        </span>
+                        <span class="text-[11px] bg-slate-100 text-slate-600 px-2.5 py-1 rounded-md font-medium">Rule Engine v1.0</span>
+                    </div>
+
+                    <!-- Dynamic Status Badge -->
+                    <div class="text-center py-6 px-4 rounded-2xl bg-slate-50 border border-slate-100 transition-all" id="badgeContainer">
+                        <div id="statusIcon" class="w-16 h-16 mx-auto rounded-full bg-emerald-100 text-emerald-600 flex items-center justify-center text-3xl mb-3 shadow-inner">
+                            <i class="fa-solid fa-heart-pulse"></i>
+                        </div>
+                        <h3 id="statusTitle" class="font-heading text-2xl font-extrabold text-slate-900">Plant is Healthy</h3>
+                        <p id="statusSubtitle" class="text-xs text-slate-500 mt-1 font-medium">All environmental metrics are within safe indoor thresholds.</p>
+                    </div>
+
+                    <!-- Health Meter Progress Bar -->
+                    <div class="mt-6 space-y-1.5">
+                        <div class="flex justify-between text-xs font-semibold">
+                            <span class="text-slate-600">Calculated Health Index</span>
+                            <span id="healthIndexScore" class="text-emerald-600">95 / 100</span>
+                        </div>
+                        <div class="w-full bg-slate-100 h-2.5 rounded-full overflow-hidden">
+                            <div id="healthProgressBar" class="bg-emerald-500 h-full rounded-full transition-all duration-500" style="width: 95%;"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Dynamic Recommendations Card -->
+                <div class="bg-white rounded-3xl p-6 sm:p-7 border border-slate-200/80 shadow-sm space-y-4">
+                    <h3 class="font-heading font-bold text-slate-900 text-lg flex items-center gap-2">
+                        <i class="fa-solid fa-wand-magic-sparkles text-amber-500"></i> Smart Daily Care Tips
+                    </h3>
+                    <ul id="recommendationsList" class="space-y-3">
+                        <!-- Dynamic LI items inserted via JS -->
+                    </ul>
+                </div>
+
+            </div>
+        </div>
+
+        <!-- Team & Roles Section -->
+        <section class="mt-12 bg-white rounded-3xl p-6 sm:p-8 border border-slate-200/80 shadow-sm">
+            <div class="flex flex-col md:flex-row md:items-center justify-between pb-6 mb-6 border-b border-slate-100 gap-2">
+                <div>
+                    <span class="text-xs font-bold text-brand-600 uppercase tracking-widest">Project Team Roster</span>
+                    <h2 class="font-heading text-2xl font-bold text-slate-900">Al Kamal Grade 11C Developers</h2>
+                </div>
+                <span class="px-3 py-1 bg-brand-50 text-brand-700 text-xs font-bold rounded-lg border border-brand-200/60 w-fit">
+                    Term 1 PBL Showcase
+                </span>
+            </div>
+
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
+                
+                <!-- Member 1 -->
+                <div class="p-5 rounded-2xl bg-slate-50 border border-slate-100 hover:border-emerald-200 transition group">
+                    <div class="w-11 h-11 rounded-xl bg-emerald-100 text-emerald-700 font-bold flex items-center justify-center text-base mb-3 group-hover:scale-105 transition">
+                        AE
+                    </div>
+                    <h3 class="font-heading font-bold text-slate-900 text-base">Abdelrahman Elbahrawy</h3>
+                    <p class="text-xs font-semibold text-emerald-600 mb-2">Team Leader & Documenter</p>
+                    <p class="text-[11px] text-slate-500 leading-relaxed">
+                        Coordinates weekly milestones, maintains documentation, and records research decisions.
+                    </p>
+                </div>
+
+                <!-- Member 2 -->
+                <div class="p-5 rounded-2xl bg-slate-50 border border-slate-100 hover:border-emerald-200 transition group">
+                    <div class="w-11 h-11 rounded-xl bg-blue-100 text-blue-700 font-bold flex items-center justify-center text-base mb-3 group-hover:scale-105 transition">
+                        MN
+                    </div>
+                    <h3 class="font-heading font-bold text-slate-900 text-base">Mohammad Al Najjar</h3>
+                    <p class="text-xs font-semibold text-blue-600 mb-2">Presenter & Programmer</p>
+                    <p class="text-[11px] text-slate-500 leading-relaxed">
+                        Leads project showcase presentations and develops frontend scripts and helper components.
+                    </p>
+                </div>
+
+                <!-- Member 3 -->
+                <div class="p-5 rounded-2xl bg-slate-50 border border-slate-100 hover:border-emerald-200 transition group">
+                    <div class="w-11 h-11 rounded-xl bg-amber-100 text-amber-700 font-bold flex items-center justify-center text-base mb-3 group-hover:scale-105 transition">
+                        ZM
+                    </div>
+                    <h3 class="font-heading font-bold text-slate-900 text-base">Zaid Mohanad</h3>
+                    <p class="text-xs font-semibold text-amber-600 mb-2">Time Keeper & Researcher</p>
+                    <p class="text-[11px] text-slate-500 leading-relaxed">
+                        Tracks task deadlines, manages schedules, and collects accurate plant threshold dataset parameters.
+                    </p>
+                </div>
+
+                <!-- Member 4 -->
+                <div class="p-5 rounded-2xl bg-slate-50 border border-slate-100 hover:border-emerald-200 transition group">
+                    <div class="w-11 h-11 rounded-xl bg-purple-100 text-purple-700 font-bold flex items-center justify-center text-base mb-3 group-hover:scale-105 transition">
+                        QN
+                    </div>
+                    <h3 class="font-heading font-bold text-slate-900 text-base">Qusai Nader</h3>
+                    <p class="text-xs font-semibold text-purple-600 mb-2">Designer & Programmer</p>
+                    <p class="text-[11px] text-slate-500 leading-relaxed">
+                        Crafts visual UI layouts, color schemes, and programs core AI classification logic.
+                    </p>
+                </div>
+
+            </div>
+        </section>
+
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-white border-t border-slate-200/80 py-6 mt-12 text-center text-xs text-slate-500">
+        <div class="max-w-7xl mx-auto px-4">
+            <p>© PBL Project • Al Kamal American International School - Halwan • Grade 11C</p>
+            <p class="mt-1 text-slate-400">AI Smart Plant Care Assistant Prototype</p>
+        </div>
+    </footer>
+
+    <!-- Interactive AI Logic Script -->
+    <script>
+        // DOM Elements
+        const moistureInput = document.getElementById('moistureInput');
+        const tempInput = document.getElementById('tempInput');
+        const lightInput = document.getElementById('lightInput');
+
+        const moistureVal = document.getElementById('moistureVal');
+        const tempVal = document.getElementById('tempVal');
+        const lightVal = document.getElementById('lightVal');
+
+        const moistureStatusText = document.getElementById('moistureStatusText');
+        const tempStatusText = document.getElementById('tempStatusText');
+        const lightStatusText = document.getElementById('lightStatusText');
+
+        const badgeContainer = document.getElementById('badgeContainer');
+        const statusIcon = document.getElementById('statusIcon');
+        const statusTitle = document.getElementById('statusTitle');
+        const statusSubtitle = document.getElementById('statusSubtitle');
+        const healthIndexScore = document.getElementById('healthIndexScore');
+        const healthProgressBar = document.getElementById('healthProgressBar');
+        const recommendationsList = document.getElementById('recommendationsList');
+
+        // Evaluate sensor inputs and update UI dynamically
+        function updateDashboard() {
+            const moisture = parseInt(moistureInput.value);
+            const temp = parseInt(tempInput.value);
+            const light = parseInt(lightInput.value);
+
+            // Display raw numerical values
+            moistureVal.textContent = moisture + '%';
+            tempVal.textContent = temp + ' °C';
+            lightVal.textContent = light + ' Lux';
+
+            // Individual metric statuses
+            if (moisture < 30) {
+                moistureStatusText.textContent = 'Critically Low';
+                moistureStatusText.className = 'text-sm font-bold text-blue-600';
+            } else if (moisture > 75) {
+                moistureStatusText.textContent = 'Too Wet';
+                moistureStatusText.className = 'text-sm font-bold text-cyan-600';
+            } else {
+                moistureStatusText.textContent = 'Optimal';
+                moistureStatusText.className = 'text-sm font-bold text-emerald-600';
+            }
+
+            if (temp > 30) {
+                tempStatusText.textContent = 'High Heat';
+                tempStatusText.className = 'text-sm font-bold text-orange-600';
+            } else if (temp < 15) {
+                tempStatusText.textContent = 'Chilly';
+                tempStatusText.className = 'text-sm font-bold text-blue-500';
+            } else {
+                tempStatusText.textContent = 'Ideal Range';
+                tempStatusText.className = 'text-sm font-bold text-emerald-600';
+            }
+
+            if (light < 1500) {
+                lightStatusText.textContent = 'Low Light';
+                lightStatusText.className = 'text-sm font-bold text-amber-600';
+            } else if (light > 8000) {
+                lightStatusText.textContent = 'Direct Intense Sun';
+                lightStatusText.className = 'text-sm font-bold text-red-500';
+            } else {
+                lightStatusText.textContent = 'Adequate';
+                lightStatusText.className = 'text-sm font-bold text-emerald-600';
+            }
+
+            // AI Classification Rule Engine
+            let mainStatus = 'healthy';
+            let tips = [];
+            let score = 100;
+
+            // Soil Check
+            if (moisture < 30) {
+                mainStatus = 'water_low';
+                score -= 35;
+                tips.push({
+                    icon: 'fa-droplet text-blue-500',
+                    text: 'Soil moisture is below 30%. Water thoroughly with approx. 250ml of room-temperature water.'
+                });
+            } else if (moisture > 75) {
+                score -= 15;
+                tips.push({
+                    icon: 'fa-triangle-exclamation text-amber-500',
+                    text: 'Soil is saturated (>75%). Pause watering to prevent root rot and allow pot drainage.'
+                });
+            }
+
+            // Temp Check
+            if (temp > 30) {
+                if (mainStatus === 'healthy') mainStatus = 'temp_high';
+                score -= 25;
+                tips.push({
+                    icon: 'fa-temperature-arrow-up text-orange-500',
+                    text: 'High temperature detected (>30°C). Move plant away from direct radiator heat or warm windows.'
+                });
+            } else if (temp < 15) {
+                score -= 20;
+                tips.push({
+                    icon: 'fa-snowflake text-blue-400',
+                    text: 'Temperature is low (<15°C). Ensure plant is protected from cold window drafts.'
+                });
+            }
+
+            // Light Check
+            if (light < 1500) {
+                if (mainStatus === 'healthy') mainStatus = 'sun_needed';
+                score -= 25;
+                tips.push({
+                    icon: 'fa-sun text-yellow-500',
+                    text: 'Light level is too low (<1500 Lux). Relocate plant closer to an east or south-facing window.'
+                });
+            } else if (light > 8000) {
+                if (mainStatus === 'healthy') mainStatus = 'shade_needed';
+                score -= 20;
+                tips.push({
+                    icon: 'fa-umbrella text-purple-500',
+                    text: 'Sunlight intensity is high (>8000 Lux). Use sheer curtains to filter direct light and prevent leaf burn.'
+                });
+            }
+
+            // Default healthy tip if optimal
+            if (tips.length === 0) {
+                tips.push({
+                    icon: 'fa-circle-check text-emerald-500',
+                    text: 'Environmental metrics are in perfect harmony. Maintain current care schedule!'
+                });
+                tips.push({
+                    icon: 'fa-hand-sparkles text-emerald-500',
+                    text: 'Wipe leaves gently with a damp cloth weekly to remove dust and maximize photosynthesis.'
+                });
+            }
+
+            // Clamp score between 10 and 100
+            score = Math.max(15, Math.min(100, score));
+
+            // Update Dynamic AI Badge UI based on classification
+            if (mainStatus === 'water_low') {
+                badgeContainer.className = 'text-center py-6 px-4 rounded-2xl bg-blue-50 border border-blue-200';
+                statusIcon.className = 'w-16 h-16 mx-auto rounded-full bg-blue-100 text-blue-600 flex items-center justify-center text-3xl mb-3 shadow-inner';
+                statusIcon.innerHTML = '<i class="fa-solid fa-faucet-drip"></i>';
+                statusTitle.textContent = 'Needs Water';
+                statusTitle.className = 'font-heading text-2xl font-extrabold text-blue-900';
+                statusSubtitle.textContent = 'Soil moisture is critically dry. Immediate watering recommended.';
+                healthProgressBar.className = 'bg-blue-500 h-full rounded-full transition-all duration-500';
+                healthIndexScore.className = 'text-blue-600';
+            } else if (mainStatus === 'sun_needed') {
+                badgeContainer.className = 'text-center py-6 px-4 rounded-2xl bg-amber-50 border border-amber-200';
+                statusIcon.className = 'w-16 h-16 mx-auto rounded-full bg-amber-100 text-amber-600 flex items-center justify-center text-3xl mb-3 shadow-inner';
+                statusIcon.innerHTML = '<i class="fa-solid fa-sun font-bold"></i>';
+                statusTitle.textContent = 'Needs Sunlight';
+                statusTitle.className = 'font-heading text-2xl font-extrabold text-amber-900';
+                statusSubtitle.textContent = 'Ambient lux is insufficient for healthy photosynthesis.';
+                healthProgressBar.className = 'bg-amber-500 h-full rounded-full transition-all duration-500';
+                healthIndexScore.className = 'text-amber-600';
+            } else if (mainStatus === 'temp_high') {
+                badgeContainer.className = 'text-center py-6 px-4 rounded-2xl bg-orange-50 border border-orange-200';
+                statusIcon.className = 'w-16 h-16 mx-auto rounded-full bg-orange-100 text-orange-600 flex items-center justify-center text-3xl mb-3 shadow-inner';
+                statusIcon.innerHTML = '<i class="fa-solid fa-temperature-high"></i>';
+                statusTitle.textContent = 'Heat Stress Alert';
+                statusTitle.className = 'font-heading text-2xl font-extrabold text-orange-900';
+                statusSubtitle.textContent = 'Ambient temperature exceeds recommended growth limits.';
+                healthProgressBar.className = 'bg-orange-500 h-full rounded-full transition-all duration-500';
+                healthIndexScore.className = 'text-orange-600';
+            } else {
+                badgeContainer.className = 'text-center py-6 px-4 rounded-2xl bg-emerald-50 border border-emerald-200';
+                statusIcon.className = 'w-16 h-16 mx-auto rounded-full bg-emerald-100 text-emerald-600 flex items-center justify-center text-3xl mb-3 shadow-inner';
+                statusIcon.innerHTML = '<i class="fa-solid fa-heart-pulse"></i>';
+                statusTitle.textContent = 'Optimal / Healthy';
+                statusTitle.className = 'font-heading text-2xl font-extrabold text-emerald-900';
+                statusSubtitle.textContent = 'Plant environmental parameters are currently ideal.';
+                healthProgressBar.className = 'bg-emerald-500 h-full rounded-full transition-all duration-500';
+                healthIndexScore.className = 'text-emerald-600';
+            }
+
+            healthIndexScore.textContent = `${score} / 100`;
+            healthProgressBar.style.width = `${score}%`;
+
+            // Render Care Recommendation Items
+            recommendationsList.innerHTML = '';
+            tips.forEach(tip => {
+                const li = document.createElement('li');
+                li.className = 'flex items-start gap-3 p-3 bg-slate-50 rounded-xl border border-slate-100 text-xs text-slate-700 leading-relaxed';
+                li.innerHTML = `<i class="fa-solid ${tip.icon} text-base mt-0.5 shrink-0"></i><span>${tip.text}</span>`;
+                recommendationsList.appendChild(li);
+            });
+        }
+
+        // Quick Preset Buttons handler
+        function setPreset(type) {
+            if (type === 'optimal') {
+                moistureInput.value = 55;
+                tempInput.value = 23;
+                lightInput.value = 4800;
+            } else if (type === 'dry') {
+                moistureInput.value = 18;
+                tempInput.value = 26;
+                lightInput.value = 3500;
+            } else if (type === 'heat') {
+                moistureInput.value = 35;
+                tempInput.value = 36;
+                lightInput.value = 8800;
+            } else if (type === 'lowlight') {
+                moistureInput.value = 50;
+                tempInput.value = 20;
+                lightInput.value = 800;
+            }
+            updateDashboard();
+        }
+
+        // Event Listeners
+        moistureInput.addEventListener('input', updateDashboard);
+        tempInput.addEventListener('input', updateDashboard);
+        lightInput.addEventListener('input', updateDashboard);
+
+        // Initial launch recalculation
+        window.onload = function() {
+            updateDashboard();
+        };
+    </script>
+</body>
+  </html>
